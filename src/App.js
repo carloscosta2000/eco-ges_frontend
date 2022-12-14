@@ -9,17 +9,15 @@ import About from './pages/about';
 import Blogs from './pages/blogs';
 import SignUp from './pages/signup';
 import Contact from './pages/contact';
-import Dashboard from '../pages/dashboard';
-import Preferences from '../pages/preferences';
 import Login from './pages/login';
 
 
 function App() {
-	const [token, setToken] = useState();
+	//const [token, setToken] = useState();
 
-	if(!token) {
-		return <Login setToken={setToken} />
-	}
+	// if(!token) {
+	// 	return <Login setToken={setToken} />
+	// }
 
 	return (
 		<Router>
@@ -30,8 +28,6 @@ function App() {
 			<Route path='/contact' element={<Contact/>} />
 			<Route path='/blogs' element={<Blogs/>} />
 			<Route path='/sign-up' element={<SignUp/>} />
-			<Route path="/dashboard" element={<Dashboard />} />
-			<Route path="/preferences" element={<Preferences />} />	
 		</Routes>
 		</Router>
 	);
