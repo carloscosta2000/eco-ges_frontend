@@ -62,7 +62,7 @@ const SignUp = () => {
 			//setSubmitted(true);
 			//setError(false);
 			const response = await signup_client(username, password, publickey, name);
-
+			console.log(response)
 			if("error" in response){
 				setError(true);
 				setErrorText(response.error)

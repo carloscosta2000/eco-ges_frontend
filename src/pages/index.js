@@ -10,7 +10,7 @@ function Home() {
 		  console.log(response)
 		  setUsers(response);
 		}
-		fetchData();
+		//fetchData();
 	  }, []);
 
 	return (
