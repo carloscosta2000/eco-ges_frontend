@@ -10,8 +10,9 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.4.5",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "styled-components": "^5.3.6",
+    "watchman": "^1.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -21,7 +22,7 @@
     "eject": "react-scripts eject"
   },
   "proxy": "http://localhost:3080/",
-  "eslintConfig": { 
+  "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
