@@ -22,8 +22,11 @@ export async function get_user_information(token){
         var server_public_key = await res.text()
 
         console.log("Start Diffie-Hellman")
-        const alice = crypto.createDiffieHellman(258);
+        const alice = crypto.createDiffieHellman(256);
         const aliceKey = alice.generateKeys('hex');
+        console.log("Alice Key:")
+        console.log(aliceKey.toString('hex'))
+
     
         const prime = alice.getPrime('hex')
         console.log("user_prime")
@@ -50,11 +53,11 @@ export async function get_user_information(token){
 
 
         //TEST À ASSINATURA:
-        const verify = crypto.createVerify('RSA-SHA256');
-        verify.write(encrypted_prime);
-        verify.end();
-        console.log("Verify signature")
-        console.log(verify.verify(public_key, signature));
+        // const verify = crypto.createVerify('RSA-SHA256');
+        // verify.write(encrypted_prime);
+        // verify.end();
+        // console.log("Verify signature")
+        // console.log(verify.verify(public_key, signature));
 
         const requestOptions = {
             method: 'POST',
@@ -70,19 +73,25 @@ export async function get_user_information(token){
 
         console.log("Start Request")
         const response_json = await fetch('diffie', requestOptions);
-        const response = await response_json.json()
+        const response = await response_json.json();
+
+        if("error" in response){
+            return false;
+        }
+        //TODO verificar a response.signature
+
         console.log("response")
         console.log(response)
 
         const signature_response = response.signature;
-        const keysession_encrypted = response.serverkey;
+        const serverkey_encrypted = Buffer.from(response.serverkey);
 
-        const keysession = crypto.privateDecrypt(private_key, Buffer.from(keysession_encrypted));
-        console.log(keysession.toString('hex'))
+        const serverkey = crypto.privateDecrypt(private_key, serverkey_encrypted).toString('hex');
+        console.log("serverkey")
+        console.log(serverkey.toString('hex'))
 
-        //await crypto.privateDecrypt(private_key, encrypted_payload).toString('utf-8')
-
-        //const aliceSecret = alice.computeSecret(bobKey);
+        const sessionkey = alice.computeSecret(serverkey.toString('hex'), 'hex', 'hex');
+        console.log(sessionkey.toString('hex'))
 
         //return await response.json()
     }catch(error){

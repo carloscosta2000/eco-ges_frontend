@@ -7,15 +7,30 @@ import { get_user_information } from '../services/DiffieHellmanService';
 
 function Home() {
 	const { token, setToken } = useToken();
-	//const [users, setUsers] = useState(null)
+	const [ isloading, setIsLoading ] = useState(false);
+	const { sessionKey, setSessionKey } = useState({});
 
 	useEffect(() => {
 		async function fetchData() {
 			const response = await verifyToken(token);
 			console.log("Verify Token: " + JSON.stringify(response))
 			if("success" in response){
-				const response_clients = await get_user_information(token);
-				console.log(response_clients)
+				setIsLoading(true)
+
+				let hasSessionKey = false;
+				do {
+					const response_clients = await get_user_information(token);
+					console.log(response_clients)
+					
+					if (response_clients != false)
+						hasSessionKey = true
+					
+				} while (!hasSessionKey);
+				setIsLoading(false)
+
+				
+				//const test = await getAllClients();
+				
 				//setUsers(response_clients);
 			}
 		}
@@ -24,6 +39,7 @@ function Home() {
 
 	return (
 		<div>
+		<h1>{isloading}</h1>
 		<h1>{token}</h1>
 		</div>
 	);
