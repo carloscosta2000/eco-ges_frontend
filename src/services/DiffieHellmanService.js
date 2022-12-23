@@ -17,19 +17,21 @@ export async function get_user_information(token){
         
         var res = await fetch(public_key_dir)
         var public_key = await res.text()
-
-        console.log(public_key)
         
         var res = await fetch(server_public_key_dir)
         var server_public_key = await res.text()
 
-    
+        console.log("Start Diffie-Hellman")
         const alice = crypto.createDiffieHellman(258);
         const aliceKey = alice.generateKeys('hex');
     
         const prime = alice.getPrime('hex')
+        console.log("user_prime")
         console.log(prime)
         const generator = alice.getGenerator('hex')
+        console.log("user_generator")
+        console.log(generator)
+        console.log("End Diffie-Hellman")
 
         const encrypted_prime = await crypto.publicEncrypt(server_public_key, Buffer.from(prime));
         const encrypted_generator = await crypto.publicEncrypt(server_public_key, Buffer.from(generator));
@@ -38,8 +40,6 @@ export async function get_user_information(token){
         //const encrypted_payload = await crypto.publicEncrypt(public_key, Buffer.from(prime));
         //let str = await crypto.privateDecrypt(private_key, encrypted_payload).toString('utf-8')
         //console.log(str)
-
-        console.log("PUBLIC ENCRYPT");
 
 
         //TODO ver se só se pode assinar um valor
@@ -53,9 +53,8 @@ export async function get_user_information(token){
         const verify = crypto.createVerify('RSA-SHA256');
         verify.write(encrypted_prime);
         verify.end();
+        console.log("Verify signature")
         console.log(verify.verify(public_key, signature));
-
-        console.log(signature)
 
         const requestOptions = {
             method: 'POST',
@@ -69,8 +68,17 @@ export async function get_user_information(token){
             })
         };
 
-        const response = await fetch('diffie', requestOptions);
-        console.log(await response.json())
+        console.log("Start Request")
+        const response_json = await fetch('diffie', requestOptions);
+        const response = await response_json.json()
+        console.log("response")
+        console.log(response)
+
+        const signature_response = response.signature;
+        const keysession_encrypted = response.serverkey;
+
+        const keysession = crypto.privateDecrypt(private_key, Buffer.from(keysession_encrypted));
+        console.log(keysession.toString('hex'))
 
         //await crypto.privateDecrypt(private_key, encrypted_payload).toString('utf-8')
 
@@ -81,39 +89,4 @@ export async function get_user_information(token){
         console.log(error)
         return []
     }
-}
-
-const urlDecodeBytes = (encoded) => {
-    let decoded = Buffer.from('')
-    for (let i = 0; i < encoded.length; i++) {
-      if (encoded[i] === '%') {
-        const charBuf = Buffer.from(`${encoded[i + 1]}${encoded[i + 2]}`, 'hex')
-        decoded = Buffer.concat([decoded, charBuf])
-        i += 2
-      } else {
-        const charBuf = Buffer.from(encoded[i])
-        decoded = Buffer.concat([decoded, charBuf])
-      }
-    }
-    return decoded
-}
-
-const urlEncodeBytes = (buf) => {
-    let encoded = ''
-    for (let i = 0; i < buf.length; i++) {
-      const charBuf = Buffer.from('00', 'hex')
-      charBuf.writeUInt8(buf[i])
-      const char = charBuf.toString()
-      // if the character is safe, then just print it, otherwise encode
-      if (isUrlSafe(char)) {
-        encoded += char
-      } else {
-        encoded += `%${charBuf.toString('hex').toUpperCase()}`
-      }
-    }
-    return encoded
-  }
-
-const isUrlSafe = (char) => {
-    return /[a-zA-Z0-9\-_~.]+/.test(char)
 }

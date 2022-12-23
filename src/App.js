@@ -10,6 +10,7 @@ import Login from './pages/login';
 import Dashboard from './pages/dashboard';
 import Preferences from './pages/preferences';
 import useToken from './components/useToken';
+import { Appliances } from './pages/appliances';
 
 // function setToken(userToken) {
 // 	sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -27,7 +28,7 @@ function App() {
 	const { token, setToken } = useToken();
 
 	if(!token) {
-		console.log(token)
+		console.log("Gay" + token)
 		return (
 			<Router>
 			<Navbar />
@@ -45,7 +46,7 @@ function App() {
 		<Navbar />
 			<Routes>
 				<Route exact path='/' exact element={<Home />} />
-				<Route path='/sign-up' element={<SignUp/>} />
+				<Route path='/appliances' element={<Appliances/>} />
 				<Route path='/dashboard' element={<Dashboard/>} />
 				<Route path='/preferences' element={<Preferences/>} />
 			</Routes>
