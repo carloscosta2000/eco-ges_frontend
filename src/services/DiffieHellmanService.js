@@ -48,7 +48,6 @@ export async function get_user_information(token){
         sign.end();
         const signature = await sign.sign(private_key);
 
-
         //TEST À ASSINATURA:
         const verify = crypto.createVerify('RSA-SHA256');
         verify.write(encrypted_prime);

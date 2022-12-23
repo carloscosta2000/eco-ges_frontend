@@ -8,7 +8,7 @@ import { get_user_information } from '../services/DiffieHellmanService';
 function Home() {
 	const { token, setToken } = useToken();
 	//const [users, setUsers] = useState(null)
-
+	
 	useEffect(() => {
 		async function fetchData() {
 			const response = await verifyToken(token);

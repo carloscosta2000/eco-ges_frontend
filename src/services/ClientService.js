@@ -12,11 +12,9 @@ export async function getCLient(token){
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ rnd_hash: token})
+            body: JSON.stringify({rnd_hash: token})
         };
-          
         const response = await fetch('clienttoken', requestOptions);
-        console.log("GET_CLIENT" + response.json());
         return await response.json()
     }catch(error){
         return []
@@ -31,7 +29,6 @@ export async function getAppliances(id){
             body: JSON.stringify({ clientID: id})
         };
         const response = await fetch('appliancesclient', requestOptions);
-        console.log("GET_APPLIANCES" + response.json());
         return await response.json()
     }catch(error){
         return []
