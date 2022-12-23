@@ -28,7 +28,6 @@ function App() {
 	const { token, setToken } = useToken();
 
 	if(!token) {
-		console.log("Gay" + token)
 		return (
 			<Router>
 			<Navbar />
