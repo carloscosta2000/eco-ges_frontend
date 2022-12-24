@@ -84,7 +84,6 @@ export async function diffie_hellman(token){
     console.log("\t\t Secret")
     console.log(secret.toString("hex"))
     return secret.toString("hex");
-<<<<<<< HEAD
 }
 
 export async function save_data(token, morada, nif, iban, email, telefone){
@@ -101,6 +100,4 @@ export async function save_data(token, morada, nif, iban, email, telefone){
         })
     };
     const response_json = await fetch('save-information', requestOptions);
-=======
->>>>>>> bb36aad2f16d8fd77e118fc67e96514447da2cef
 }
