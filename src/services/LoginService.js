@@ -8,7 +8,7 @@ export async function login(username, password, publickey, name){
         };
 
         const response = await fetch('login', requestOptions);
-        return await response.json()
+        return await response.json();
     }catch(error){
         return []
     }

@@ -3,7 +3,7 @@ import './App.css';
 import Navbar from './components/index';
 import { Switch } from 'react-router-dom';
 import { BrowserRouter as Router, Routes, Route} from 'react-router-dom';
-import { useLocation } from 'react-router-dom'
+import { useLocation } from 'react-router-dom';
 import Home from './pages';
 import SignUp from './pages/signup';
 import Login from './pages/login';
@@ -44,7 +44,7 @@ function App() {
 		<Router>
 		<Navbar />
 			<Routes>
-				<Route exact path='/' exact element={<Home />} />
+				<Route exact path='/' exact element={<Home/>} />
 				<Route path='/appliances' element={<Appliances/>} />
 				<Route path='/dashboard' element={<Dashboard/>} />
 				<Route path='/preferences' element={<Preferences/>} />
