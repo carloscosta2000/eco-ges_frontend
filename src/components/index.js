@@ -16,6 +16,9 @@ return (
 		<NavLink to="/blogs" activeStyle>
 			Blogs
 		</NavLink>
+		<NavLink to="/invoices" activeStyle>
+			Invoices
+		</NavLink>
 		<NavLink to="/appliances" activeStyle>
 			Appliances
 		</NavLink>

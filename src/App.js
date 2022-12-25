@@ -11,6 +11,7 @@ import Dashboard from './pages/dashboard';
 import Preferences from './pages/preferences';
 import useToken from './components/useToken';
 import { Appliances } from './pages/appliances';
+import {Invoices} from './pages/invoices';
 
 // function setToken(userToken) {
 // 	sessionStorage.setItem('token', JSON.stringify(userToken));
@@ -46,6 +47,7 @@ function App() {
 			<Routes>
 				<Route exact path='/' exact element={<Home/>} />
 				<Route path='/appliances' element={<Appliances/>} />
+				<Route path='/invoices' element={<Invoices/>} />
 				<Route path='/dashboard' element={<Dashboard/>} />
 				<Route path='/preferences' element={<Preferences/>} />
 			</Routes>
