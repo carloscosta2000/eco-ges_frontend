@@ -10,6 +10,7 @@ function Home() {
 	const { token, setToken } = useToken();
 	const [ isloading, setIsLoading ] = useState(false);
 	const [ sessionKey, setSessionKey ] = useState("");
+	const [ isSaved, setIsSaved ] = useState("");
 
 
 	const [personalInfo, setPersonalInfo] = useState({
@@ -31,10 +32,11 @@ function Home() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		await save_data(token, personalInfo.morada, personalInfo.nif, personalInfo.iban, personalInfo.email, personalInfo.telefone)
+		await save_data(token, sessionKey, personalInfo.morada, personalInfo.nif, personalInfo.iban, personalInfo.email, personalInfo.telefone)
+		setIsSaved("Information updated with success!");
+		// await new Promise(r => setTimeout(r, 2000));
+		// window.location.reload(false);
 
-		// Send the personal information to the API
-		// api.updatePersonalInfo(personalInfo);
 	};
 	
 
@@ -44,9 +46,10 @@ function Home() {
 			console.log("Verify Token: " + JSON.stringify(response))
 			if("success" in response){
 				setIsLoading(true)
-				const hexSessionKey = await diffie_hellman(token);
-				setSessionKey(hexSessionKey);
-				setIsLoading(false)
+				const information = await diffie_hellman(token);
+				setSessionKey(information.secret);
+				setIsLoading(false);
+				setPersonalInfo(information.information)
 			}
 		}
 		fetchData();
@@ -54,10 +57,12 @@ function Home() {
 
 	return (
 		<div>
+			<p>{isSaved}</p>
 			{ isloading == true &&
 				<p>Generating Session Keys.</p>
 			}
 			{ sessionKey != "" &&
+				
 				<form onSubmit={handleSubmit}>
 					<label htmlFor="morada">Address:</label>
 					<input

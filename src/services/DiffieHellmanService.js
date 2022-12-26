@@ -79,25 +79,75 @@ export async function diffie_hellman(token){
         })
     };
     console.log("\t end-diffie response received.");
-    fetch('end-diffie', requestOptions);
 
-    console.log("\t\t Secret")
-    console.log(secret.toString("hex"))
-    return secret.toString("hex");
+    const information_json = await fetch('end-diffie', requestOptions);
+    let information = await information_json.json();
+    
+    const data_to_send = {
+        morada: "",
+        nif: "",
+        iban: "",
+        email: "",
+        telefone: "",
+    }
+
+    if(information.morada)
+        data_to_send["morada"] = await decypher_data(information.morada, 'hex', 'utf-8', secret)
+    if(information.nif)
+        data_to_send["nif"] = await decypher_data(information.nif, 'hex', 'utf-8', secret)
+    if(information.iban)
+        data_to_send["iban"] = await decypher_data(information.iban, 'hex', 'utf-8', secret)
+    if(information.email)
+        data_to_send["email"] = await decypher_data(information.email, 'hex', 'utf-8', secret)
+    if(information.telefone)
+        data_to_send["telefone"] = await decypher_data(information.telefone, 'hex', 'utf-8', secret)
+
+    return {secret: secret.toString("hex"), information: data_to_send};
 }
 
-export async function save_data(token, morada, nif, iban, email, telefone){
+export async function save_data(token, sessionKey, morada, nif, iban, email, telefone){
     
+    console.log("SessionKey");
+    console.log(sessionKey)
+
     let requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-            morada: morada,
-            nif: nif,
-            iban: iban,
-            email: email,
-            telefone: telefone
+            token: token,
+            morada: await cypher_data(morada, 'utf-8', 'hex', sessionKey),
+            nif: await cypher_data(nif, 'utf-8', 'hex', sessionKey),
+            iban: await cypher_data(iban, 'utf-8', 'hex', sessionKey),
+            email: await cypher_data(email, 'utf-8', 'hex', sessionKey),
+            telefone: await cypher_data(telefone, 'utf-8', 'hex', sessionKey)
         })
     };
+
+
+    const encrypted_morada = await cypher_data(morada, 'utf-8', 'hex', sessionKey);
+    const decrypted_morada = await decypher_data(encrypted_morada, 'hex', 'utf-8', sessionKey);
+    console.log(morada == decrypted_morada)
+    console.log("encrypted_morada")
+    console.log(encrypted_morada)
+    console.log(morada + " " + decrypted_morada)
+
+
+
     const response_json = await fetch('save-information', requestOptions);
+}
+
+
+async function decypher_data(encrypted_data, inputEncoding, outputEncoding, secret_passed){
+    const decipher = crypto.createDecipher("aes-256-cbc", secret_passed);
+    let decrypted = decipher.update(encrypted_data, inputEncoding, outputEncoding);
+    decrypted += decipher.final(outputEncoding);
+    return decrypted;
+}
+
+async function cypher_data(data, inputEncoding, outputEncoding, secret_passed){
+    const algorithm = 'aes-256-cbc';
+    const cipher  = crypto.createCipher(algorithm, secret_passed);
+    let encrypted = cipher.update(data, inputEncoding, outputEncoding);
+    encrypted += cipher.final(outputEncoding);
+    return encrypted;
 }
