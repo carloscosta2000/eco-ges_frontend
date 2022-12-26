@@ -79,7 +79,11 @@ export async function diffie_hellman(token){
         })
     };
     console.log("\t end-diffie response received.");
-    fetch('end-diffie', requestOptions);
+
+    const information_json = await fetch('end-diffie', requestOptions);
+    const information = await information_json.json();
+    console.log("Information:")
+    console.log(information)
 
     console.log("\t\t Secret")
     console.log(secret.toString("hex"))
