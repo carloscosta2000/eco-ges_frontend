@@ -40,64 +40,73 @@ function Appliances() {
 
     return (
         <div className="container">
-            <h3 className="p-3 text-center">Appliances of {client_name}</h3>
-            <table className="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th className="p-3 text-center">Nome</th>
-                        <th className="p-3 text-center">Consumo Máximo</th>
-                        <th className="p-3 text-center">Produz energia?</th>
-                        <th className="p-3 text-center">ContractID</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {appliances.map(appliance =>
-                        <tr key={appliance.id}>
-                            <td>{appliance.nome}</td>
-                            <td>{appliance.maxConsumption}</td>
-                            <td>{appliance.isProducing}</td>
-                            <td>{appliance.contractID}</td>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div>
+                    <h3 style={{width: '100%', textAlign: 'center'}}>Appliances of {client_name}</h3>
+                    <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th className="p-3 text-center">Nome</th>
+                            <th className="p-3 text-center">Consumo Máximo</th>
+                            <th className="p-3 text-center">Produz energia?</th>
+                            <th className="p-3 text-center">ContractID</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
-            <h3 className="p-3 text-center">Contracts of {client_name}</h3>
-            <table className="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th className="p-3 text-center">ContractID</th>
-                        <th className="p-3 text-center">Type</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {contracts.map(contract =>
-                        <tr key={contract.id}>
-                            <td>{contract.id}</td>
-                            <td>{contract.tipo}</td>
+                    </thead>
+                    <tbody>
+                        {appliances.map(appliance =>
+                            <tr key={appliance.id}>
+                                <td>{appliance.nome}</td>
+                                <td>{appliance.maxConsumption}</td>
+                                <td>{appliance.isProducing}</td>
+                                <td>{appliance.contractID}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                    </table>
+                </div>
+                <div>
+                    <h3 style={{width: '100%', textAlign: 'center'}}>Contracts of {client_name}</h3>
+                    <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th className="p-3 text-center">ContractID</th>
+                            <th className="p-3 text-center">Type</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
-            <h3 className="p-3 text-center">Consumptions of {client_name}'s Appliances</h3>
-            <table className="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th className="p-3 text-center">ApplianceID</th>
-                        <th className="p-3 text-center">Time of Consumption</th>
-                        <th className="p-3 text-center">Consumption</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {consumptions.map(consumption =>
-                        <tr key={consumption.id}>
-                            <td>{consumption.applianceID}</td>
-                            <td>{consumption.ts}</td>
-                            <td>{consumption.consumption}</td>
+                    </thead>
+                    <tbody>
+                        {contracts.map(contract =>
+                            <tr key={contract.id}>
+                                <td>{contract.id}</td>
+                                <td>{contract.tipo}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                    </table>
+                </div>
+                <div>
+                <h3 className="p-3 text-center">Consumptions of {client_name}'s Appliances</h3>
+                <table className="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th className="p-3 text-center">ApplianceID</th>
+                            <th className="p-3 text-center">Time of Consumption</th>
+                            <th className="p-3 text-center">Consumption</th>
                         </tr>
-                    )}
-                </tbody>
-            </table>
-            <p>Total a pagar: {invoices}</p>
+                    </thead>
+                    <tbody>
+                        {consumptions.map(consumption =>
+                            <tr key={consumption.id}>
+                                <td>{consumption.applianceID}</td>
+                                <td>{consumption.ts}</td>
+                                <td>{consumption.consumption}</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+                <br></br>
+                <p>Total a pagar: {invoices}</p>
+                </div>
+            </div>  
         </div>
     );
 }
