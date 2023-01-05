@@ -2,21 +2,25 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './login.css';
 import { login } from '../services/LoginService'
+import { useNavigate } from "react-router-dom";
+import './signup.css';
 
 
 export default function Login({ setToken }) {
   
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+  const navigate = useNavigate();
 
   const handleSubmit = async e => {
     e.preventDefault();
     const response = await login(username, password);
     setToken(response);
+    navigate("/")
   }
 
   return(
-    <div className="login-wrapper">
+    <div className="form">
       <h1>Please Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>

@@ -4,19 +4,10 @@ import './signup.css';
 
 const SignUp = () => {
 
-	// useEffect(() => { 
-	// 	async function signup() {
-	// 	  const response = await signup_client("fiaes", "1234", "rsakeyyyy", "francisco");
-	// 	}
-	// 	//signup();
-	// }, []);
-
-	
 	// States for registration
 	const [name, setName] = useState('');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
-	const [publickey, setPublickey] = useState('');
 	
 	// States for checking the errors
 	const [submitted, setSubmitted] = useState(false);
@@ -44,12 +35,6 @@ const SignUp = () => {
 		setSubmitted(false);
 	};
 
-	// Handling the publickey change
-	const handlePublicKey = (e) => {
-		setPublickey(e.target.value);
-		setSubmitted(false);
-	};
-
 
 	// Handling the form submission
 	const handleSubmit = async (e) => {
@@ -61,7 +46,7 @@ const SignUp = () => {
 		} else {
 			//setSubmitted(true);
 			//setError(false);
-			const response = await signup_client(username, password, publickey, name);
+			const response = await signup_client(username, password, name);
 			console.log(response)
 			if("error" in response){
 				setError(true);
@@ -126,10 +111,6 @@ const SignUp = () => {
         <input onChange={handlePassword} className="input"
           value={password} type="password" />
 
-		<label className="label">Public Key</label>
-        <input onChange={handlePublicKey} className="input"
-          value={publickey} type="text" />
- 
         <button onClick={handleSubmit} className="btn" type="submit">
           Submit
         </button>

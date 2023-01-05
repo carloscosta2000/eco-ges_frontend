@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getAllClients } from '../services/ClientService';
 import { verifyToken } from '../services/SessionService';
 import useToken from '../components/useToken';
-
+import { useNavigate } from "react-router-dom";
 import { diffie_hellman, save_data } from '../services/DiffieHellmanService';
 
 
@@ -11,7 +10,9 @@ function Home() {
 	const [ isloading, setIsLoading ] = useState(false);
 	const [ sessionKey, setSessionKey ] = useState("");
 	const [ isSaved, setIsSaved ] = useState("");
+	const navigate = useNavigate();
 
+	
 
 	const [personalInfo, setPersonalInfo] = useState({
 		morada: '',
@@ -41,6 +42,9 @@ function Home() {
 	
 
 	useEffect(() => {
+		if(!token){
+			navigate("/login")
+		}
 		async function fetchData() {
 			const response = await verifyToken(token);
 			console.log("Verify Token: " + JSON.stringify(response))
@@ -66,6 +70,7 @@ function Home() {
 				<form onSubmit={handleSubmit}>
 					<label htmlFor="morada">Address:</label>
 					<input
+						minlength="5"
 						type="text"
 						id="morada"
 						name="morada"
@@ -74,6 +79,7 @@ function Home() {
 					/><br />
 					<label htmlFor="nif">NIF:</label>
 					<input
+						minlength="5"
 						type="text"
 						id="nif"
 						name="nif"
@@ -82,6 +88,7 @@ function Home() {
 					/><br />
 					<label htmlFor="iban">IBAN:</label>
 					<input
+						minlength="5"
 						type="text"
 						id="iban"
 						name="iban"
@@ -90,6 +97,7 @@ function Home() {
 					/><br />
 					<label htmlFor="iban">Email:</label>
 					<input
+						minlength="5"
 						type="email"
 						id="email"
 						name="email"
@@ -98,6 +106,7 @@ function Home() {
 					/><br />
 					<label htmlFor="iban">Phone:</label>
 					<input
+						minlength="5"
 						type="text"
 						id="telefone"
 						name="telefone"

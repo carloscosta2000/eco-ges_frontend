@@ -5,6 +5,7 @@ import { getInvoices } from '../services/ClientService';
 import useToken from '../components/useToken';
 import { getContract } from '../services/ClientService';
 import { getConsumptions } from '../services/ClientService';
+import { useNavigate } from "react-router-dom";
 
 function Appliances() {
     const { token, setToken } = useToken();
@@ -14,7 +15,16 @@ function Appliances() {
     const [invoices, setInvoices] = useState(0);
     const [contracts, setContracts] = useState([[]]);
     const [consumptions, setConsumptions] = useState([[]]);
+
+
+    const navigate = useNavigate();
+
+	
+
     useEffect(() => {
+        if(!token){
+            navigate("/login")
+        }
 		async function fetchData() {
             const response_client = await getCLient(token);
             const client = response_client[0];
