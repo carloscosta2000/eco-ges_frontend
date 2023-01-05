@@ -10,6 +10,8 @@ function Home() {
 	const [ isloading, setIsLoading ] = useState(false);
 	const [ sessionKey, setSessionKey ] = useState("");
 	const [ isSaved, setIsSaved ] = useState("");
+	const [ timestamp, setTimeStamp ] = useState();
+
 	const navigate = useNavigate();
 
 	
@@ -33,11 +35,21 @@ function Home() {
 	const handleSubmit = async (event) => {
 		event.preventDefault();
 
-		await save_data(token, sessionKey, personalInfo.morada, personalInfo.nif, personalInfo.iban, personalInfo.email, personalInfo.telefone)
-		setIsSaved("Information updated with success!");
-		// await new Promise(r => setTimeout(r, 2000));
-		// window.location.reload(false);
+		// timestamp + 1min for maior que now pode fazer save
 
+		let max_threshold = new Date(parseInt(timestamp))
+		console.log(max_threshold)
+		
+		max_threshold.setMinutes(max_threshold.getMinutes() + 1);
+
+		const now = new Date()
+		console.log(now)
+		if (max_threshold > now){
+			await save_data(token, sessionKey, personalInfo.morada, personalInfo.nif, personalInfo.iban, personalInfo.email, personalInfo.telefone)
+			setIsSaved("Information updated with success!");
+		}else{
+			setIsSaved("The time limit has expired! You only have one minute to update your critical information. Please refresh the page.");
+		}
 	};
 	
 
@@ -52,6 +64,7 @@ function Home() {
 				setIsLoading(true)
 				const information = await diffie_hellman(token);
 				setSessionKey(information.secret);
+				setTimeStamp(information.timestamp)
 				setIsLoading(false);
 				setPersonalInfo(information.information)
 			}
@@ -70,7 +83,7 @@ function Home() {
 				<form onSubmit={handleSubmit}>
 					<label htmlFor="morada">Address:</label>
 					<input
-						minlength="5"
+						minLength="5"
 						type="text"
 						id="morada"
 						name="morada"
@@ -79,7 +92,7 @@ function Home() {
 					/><br />
 					<label htmlFor="nif">NIF:</label>
 					<input
-						minlength="5"
+						minLength="5"
 						type="text"
 						id="nif"
 						name="nif"
@@ -88,7 +101,7 @@ function Home() {
 					/><br />
 					<label htmlFor="iban">IBAN:</label>
 					<input
-						minlength="5"
+						minLength="5"
 						type="text"
 						id="iban"
 						name="iban"
@@ -97,7 +110,7 @@ function Home() {
 					/><br />
 					<label htmlFor="iban">Email:</label>
 					<input
-						minlength="5"
+						minLength="5"
 						type="email"
 						id="email"
 						name="email"
@@ -106,7 +119,7 @@ function Home() {
 					/><br />
 					<label htmlFor="iban">Phone:</label>
 					<input
-						minlength="5"
+						minLength="5"
 						type="text"
 						id="telefone"
 						name="telefone"

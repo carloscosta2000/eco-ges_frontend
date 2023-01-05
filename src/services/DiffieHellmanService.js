@@ -26,6 +26,7 @@ export async function diffie_hellman(token){
     verify.write(Buffer.from(response.encrypted_aliceKey));
     verify.write(Buffer.from(response.encrypted_alicePrime));
     verify.write(Buffer.from(response.encrypted_aliceGenerator));
+    verify.write(Buffer.from(response.encrypted_timestamp));
     verify.end();
 
     if(!verify.verify(server_public_key, Buffer.from(response.signature))){
@@ -36,11 +37,13 @@ export async function diffie_hellman(token){
     const aliceKey = crypto.privateDecrypt(private_key, Buffer.from(response.encrypted_aliceKey));
     const alicePrime = crypto.privateDecrypt(private_key, Buffer.from(response.encrypted_alicePrime));
     const aliceGenerator = crypto.privateDecrypt(private_key, Buffer.from(response.encrypted_aliceGenerator));
+    const timestamp = crypto.privateDecrypt(private_key, Buffer.from(response.encrypted_timestamp));
     
     console.log("start-diffie Values (Decrypted):");
     console.log("\t Alicekey: " + aliceKey.toString('hex'))
     console.log("\t AlicePrime: " + alicePrime.toString('hex'))
     console.log("\t AliceGenerator: " + aliceGenerator.toString('hex'))
+    console.log("\t Timestamp: " + timestamp)
 
 
     const bob = crypto.createDiffieHellman(alicePrime, aliceGenerator);
@@ -102,7 +105,7 @@ export async function diffie_hellman(token){
     if(information.telefone)
         data_to_send["telefone"] = await decypher_data(information.telefone, 'hex', 'utf-8', secret)
 
-    return {secret: secret.toString("hex"), information: data_to_send};
+    return {secret: secret.toString("hex"), information: data_to_send, timestamp: timestamp};
 }
 
 export async function save_data(token, sessionKey, morada, nif, iban, email, telefone){
