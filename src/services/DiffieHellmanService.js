@@ -3,23 +3,33 @@
 import private_key_dir from '../keys/server.key';
 //import public_key_dir from '../keys/public.key';
 import server_public_key_dir from '../keys/backendpublic.key';
+import certificate_dir from '../keys/frontend.crt'
+
 var crypto = require('crypto-browserify');
 
 export async function diffie_hellman(token){
     
     const private_key = await (await fetch(private_key_dir)).text();
-    //const public_key = await (await fetch(public_key_dir)).text();
     const server_public_key = await (await fetch(server_public_key_dir)).text();
-
+    const certificate = await (await fetch(certificate_dir)).text();
+    
+    console.log("Certificate:")
+    console.log(certificate)
+    
     let requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({certificate: certificate})
     };
     const response_json = await fetch('start-diffie', requestOptions);
     const response = await response_json.json();
     
     console.log("\t start-diffie response received.");
     console.log(response)
+
+    //TEST The server Certificate
+    const server_x509 = new crypto.X509Certificate(response.certificate);
+    console.log(server_x509)
 
     //TEST À ASSINATURA:
     const verify = crypto.createVerify('RSA-SHA256');
